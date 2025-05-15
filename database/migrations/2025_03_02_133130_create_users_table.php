@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('password');
             $table->boolean('is_active')->default(true); // Add a column for account status if needed
             $table->timestamps();
+            $table->string('role')->nullable();
         });
     }
 

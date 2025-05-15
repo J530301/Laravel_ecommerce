@@ -1,50 +1,78 @@
 <!-- Sidebar for Categories -->
-<div id="sidebar" class="fixed inset-y-0 left-0 bg-white w-64 shadow-lg transform -translate-x-full transition-transform duration-300 z-50">
+<div id="sidebar" class="fixed inset-y-0 left-0 bg-gray-900 w-64 shadow-lg transform -translate-x-full transition-transform duration-300 z-50">
     <div class="p-4">
-        <button id="closeSidebar" class="text-black text-lg">
+        <button id="closeSidebar" class="text-white text-lg">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
             </svg>
         </button>
-        <ul class="mt-4">
-            <li class="mb-2 flex items-center">
-                <a href="{{ route('index') }}" class="text-black hover:text-gray-700 w-full text-left text-1xl flex items-center bg-green-200 bg-opacity-70 border border-green-500 p-2 rounded">
-                    <svg class="w-4 h-4 mr-2 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M13 5v6h6m-6 0l-7 7-2-2m0 0l7-7 7 7"></path>
-                    </svg>
-                    <span class="">Home</span>
-                </a>
-            </li>
-            <li class="mb-2">
-                <button id="addProductButton" class="text-black hover:text-gray-700 w-full text-left flex items-center bg-green-200 bg-opacity-70 border border-green-500 p-2 rounded">
-                    <svg class="w-4 h-4 mr-2 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                    </svg>
-                    Add Product
-                </button>
-            </li>
-            <li class="mb-2">
-                <h2 class="text-black w-full text-left flex items-center font-bold">
+       <ul class="mt-4">
+            <li class="mb-4 flex items-center">
+                    <a href="{{ route('index') }}"
+                    class="flex items-center gap-4 px-10 py-4 rounded-xl bg-gradient-to-r from-gray-100 to-gray-300 text-black text-3xl font-extrabold shadow-lg border-4 border-black hover:scale-105 hover:shadow-2xl transition-all duration-200">
+                        <!-- Home Icon -->
+                        <svg class="w-8 h-8 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l9-9 9 9M4 10v10a1 1 0 001 1h3m10-11v10a1 1 0 01-1 1h-3m-6 0h6"></path>
+                        </svg>
+                        Home
+                    </a>
+                </li>
+
+                @if(auth()->user()->role === 'admin')
+                    <li class="mb-4">
+                        <button id="addProductButton"
+                            class="flex items-center gap-4 px-6 py-4 rounded-xl bg-gradient-to-r from-yellow-400 to-yellow-600 text-black text-2xl font-bold shadow-lg border-4 border-yellow-700 hover:scale-105 hover:shadow-2xl transition-all duration-200 w-full text-left">
+                            <svg class="w-8 h-8 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                            </svg>
+                            Add Product
+                        </button>
+                    </li>
+                @else
+                    <li class="mb-4 flex items-center">
+                        <a href="{{ route('orders') }}"
+                        class="flex items-center gap-4 px-4 py-4 rounded-xl bg-gradient-to-r from-gray-100 to-gray-300 text-black text-3xl font-extrabold shadow-lg border-4 border-black hover:scale-105 hover:shadow-2xl transition-all duration-200">
+                            <!-- Purchase Icon (Shopping Cart) -->
+                            <svg class="w-8 h-8 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="9" cy="21" r="1"></circle>
+                                <circle cx="20" cy="21" r="1"></circle>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"></path>
+                            </svg>
+                            Purchase
+                        </a>
+                    </li>
+                @endif
+            <li class="mb-2 pt-5">
+                <h2 class="text-white w-full pl-3 text-left text-2xl flex items-center font-bold mb-4">
                     Product Category
                 </h2>
-                <ul id="productCategoryList" class="mt-2 ml-4">
-                    <li class="mb-2 flex items-center">
-                        <svg class="w-4 h-4 mr-2 text-black" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="10" cy="10" r="3"></circle>
-                        </svg>
-                        <h3><a href="{{ route('phone') }}" class="text-black hover:text-gray-700">Phones</a></h3>
+                <ul id="productCategoryList" class="space-y-3">
+                    <li>
+                        <a href="{{ route('phone') }}"
+                        class="flex items-center gap-3 px-4 py-3 rounded-xl bg-gradient-to-r from-green-400 to-blue-500 text-white text-xl font-semibold shadow-lg border-2 border-blue-400 hover:scale-105 hover:shadow-2xl transition-all duration-200">
+                            <svg class="w-7 h-7 text-white opacity-90" fill="currentColor" viewBox="0 0 20 20">
+                                <circle cx="10" cy="10" r="3"></circle>
+                            </svg>
+                            Phones
+                        </a>
                     </li>
-                    <li class="mb-2 flex items-center">
-                        <svg class="w-4 h-4 mr-2 text-black" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="10" cy="10" r="3"></circle>
-                        </svg>
-                        <h3><a href="{{ route('computer') }}" class="text-black hover:text-gray-700">Computers</a></h3>
+                    <li>
+                        <a href="{{ route('computer') }}"
+                        class="flex items-center gap-3 px-4 py-3 rounded-xl bg-gradient-to-r from-purple-400 to-pink-500 text-white text-xl font-semibold shadow-lg border-2 border-pink-400 hover:scale-105 hover:shadow-2xl transition-all duration-200">
+                            <svg class="w-7 h-7 text-white opacity-90" fill="currentColor" viewBox="0 0 20 20">
+                                <circle cx="10" cy="10" r="3"></circle>
+                            </svg>
+                            Computers
+                        </a>
                     </li>
-                    <li class="mb-2 flex items-center">
-                        <svg class="w-4 h-4 mr-2 text-black" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="10" cy="10" r="3"></circle>
-                        </svg>
-                        <h3><a href="{{ route('laptop') }}" class="text-black hover:text-gray-700">Laptops</a></h3>
+                    <li>
+                        <a href="{{ route('laptop') }}"
+                        class="flex items-center gap-3 px-4 py-3 rounded-xl bg-gradient-to-r from-yellow-400 to-red-500 text-white text-xl font-semibold shadow-lg border-2 border-red-400 hover:scale-105 hover:shadow-2xl transition-all duration-200">
+                            <svg class="w-7 h-7 text-white opacity-90" fill="currentColor" viewBox="0 0 20 20">
+                                <circle cx="10" cy="10" r="3"></circle>
+                            </svg>
+                            Laptops
+                        </a>
                     </li>
                 </ul>
             </li>
@@ -97,17 +125,7 @@
 </div>
 
 <script>
-     // Toggle Sidebar
-     document.getElementById('categoryButton').addEventListener('click', () => {
-        document.getElementById('sidebar').classList.toggle('-translate-x-full');
-        document.getElementById('pageContent').classList.toggle('ml-64'); // Adjust content width
-    });
 
-    // Close Sidebar
-    document.getElementById('closeSidebar').addEventListener('click', () => {
-        document.getElementById('sidebar').classList.add('-translate-x-full');
-        document.getElementById('pageContent').classList.remove('ml-64'); // Reset content width
-    });
 
     // Open Add Product Modal
     document.getElementById('addProductButton').addEventListener('click', () => {

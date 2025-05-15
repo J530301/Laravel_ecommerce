@@ -21,6 +21,8 @@
         <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500"></div>
     </div>
 
+      @include('content.sidebar')
+
     <!-- Page Content (Initially Hidden) -->
     <div id="pageContent" class="hidden transition-opacity duration-500">
         @include('content.nav') <!-- Navbar -->
@@ -41,18 +43,11 @@
 
     <!-- Scripts for functionality -->
     <script>
+        
         $(document).ready(function () {
             // Toggle Sidebar
-            $('#categoryButton').click(function () {
-                $('#sidebar').toggleClass('-translate-x-full');
-                $('#pageContent').toggleClass('ml-64'); // Adjust content width
-            });
-
-            // Close Sidebar
-            $('#closeSidebar').click(function () {
-                $('#sidebar').addClass('-translate-x-full');
-                $('#pageContent').removeClass('ml-64'); // Reset content width
-            });
+            
+            
 
             // Show product details overlay
             $(document).on('click', '.view-details', function () {
@@ -155,11 +150,11 @@
                         if (response.success) {
                             alert("Product updated successfully!");
                             location.reload(); // Refresh the page after successful update
-                        } else {
+                        } else {    
                             alert(response.message);
                         }
                     },
-                    error: () => alert("An error occurred. Please try again."),
+                    error: () => alert("Please update all other fields. Try again."),
                 });
             });
     
@@ -188,7 +183,132 @@
             $(document).on('click', '#editImageOverlay', function () {
                 $("#editImageInput").click();
             });
+
+            
+        $(document).on('click', '#updateImageButton', function () {
+            let productID = $("#overlayProductID").text();
+            let image = $("#editImageInput")[0].files[0];
+
+            if (!image) {
+                alert("Please select an image first.");
+                return;
+            }
+
+            let formData = new FormData();
+            formData.append('id', productID);
+            formData.append('image', image);
+
+            $.ajax({
+                url: "{{ route('updateProduct') }}",
+                method: "POST",
+                headers: { "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content") },
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    if (response.success) {
+                        alert("Product image updated successfully!");
+                        location.reload();
+                    } else {
+                        alert(response.message);
+                    }
+                },
+                error: () => alert("An error occurred. Please try again."),
+            });
+        });
+
+
+    // Update Product Name
+    $("#updateProductName").click(function () {
+        let productID = $("#overlayProductID").text();
+        let productName = $("#editProductName").val();
+
+        $.ajax({
+            url: "{{ route('updateProduct') }}",
+            method: "POST",
+            headers: { "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content") },
+            data: { id: productID, name: productName },
+            success: function (response) {
+                if (response.success) {
+                    alert("Product name updated successfully!");
+                    location.reload();
+                } else {
+                    alert(response.message);
+                }
+            },
+            error: () => alert("An error occurred. Please try again."),
+        });
+    });
+
+    // Update Product Price
+    $("#updateProductPrice").click(function () {
+        let productID = $("#overlayProductID").text();
+        let price = $("#editProductPrice").val();
+
+        $.ajax({
+            url: "{{ route('updateProduct') }}",
+            method: "POST",
+            headers: { "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content") },
+            data: { id: productID, price: price },
+            success: function (response) {
+                if (response.success) {
+                    alert("Product price updated successfully!");
+                    location.reload();
+                } else {
+                    alert(response.message);
+                }
+            },
+            error: () => alert("An error occurred. Please try again."),
+        });
+    });
+
+    // Update Product Specifications
+    $("#updateProductSpecs").click(function () {
+        let productID = $("#overlayProductID").text();
+        let specs = $("#editProductSpecs").val();
+
+        $.ajax({
+            url: "{{ route('updateProduct') }}",
+            method: "POST",
+            headers: { "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content") },
+            data: { id: productID, specs: specs },
+            success: function (response) {
+                if (response.success) {
+                    alert("Product specifications updated successfully!");
+                    location.reload();
+                } else {
+                    alert(response.message);
+                }
+            },
+            error: () => alert("An error occurred. Please try again."),
+        });
+    });
+
+    // Update Product Stock
+    $("#updateProductStock").click(function () {
+        let productID = $("#overlayProductID").text();
+        let stock = $("#stockInput").val();
+
+        $.ajax({
+            url: "{{ route('updateProduct') }}",
+            method: "POST",
+            headers: { "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content") },
+            data: { id: productID, stock: stock },
+            success: function (response) {
+                if (response.success) {
+                    alert("Product stock updated successfully!");
+                    location.reload();
+                } else {
+                    alert(response.message);
+                }
+            },
+            error: () => alert("An error occurred. Please try again."),
+        });
+    });
+
         });
     </script>
+    
+    
 </body>
 </html>

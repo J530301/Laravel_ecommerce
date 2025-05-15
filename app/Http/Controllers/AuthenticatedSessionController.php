@@ -27,6 +27,7 @@ class AuthenticatedSessionController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => bcrypt($request->password),
+            'role' => 'user',
         ]);
 
         return redirect()->route('login')->with('success', 'Registration successful! Please login.');

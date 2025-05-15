@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use App\Models\Order;
 
 class ProductController extends Controller
 {
@@ -47,24 +48,41 @@ class ProductController extends Controller
     }
 
     public function buyProduct(Request $request)
-    {
-        $request->validate([
-            'product' => 'required|string',
-            'quantity' => 'required|integer|min:1'
-        ]);
+        {
+            $request->validate([
+                'product' => 'required|string',
+                'quantity' => 'required|integer|min:1'
+            ]);
 
-        $product = Product::where('name', $request->product)->first();
+            $product = Product::where('name', $request->product)->first();
 
-        if (!$product || $product->stock < $request->quantity) {
-            return response()->json(['success' => false, 'message' => 'Not enough stock available.']);
+            if (!$product || $product->stock < $request->quantity) {
+                return response()->json(['success' => false, 'message' => 'Not enough stock available.']);
+            }
+
+            // Reduce stock quantity
+            $product->stock -= $request->quantity;
+            $product->save();
+
+            // Create order record
+            Order::create([
+                'user_id'      => auth()->id(),
+                'user_name'    => auth()->user()->name,
+                'product_id'   => $product->id,
+                'product_name' => $product->name,
+                'price'        => $product->price,
+                'quantity'     => $request->quantity,
+                'action'       => 'delivered',
+            ]);
+
+            return response()->json(['success' => true]);
         }
-
-        // Reduce stock quantity
-        $product->stock -= $request->quantity;
-        $product->save();
-
-        return response()->json(['success' => true]);
-    }
+    
+    public function myOrders()
+        {
+            $orders = \App\Models\Order::where('user_id', auth()->id())->latest()->get();
+            return view('orders', compact('orders'));
+        }
 
     public function orderSuccess()
     {
@@ -154,34 +172,46 @@ class ProductController extends Controller
         return response()->json(['success' => true, 'image_url' => asset('images/' . $imageName)]);
     }
 
-    public function updateProduct(Request $request)
-    {
-        $product = Product::find($request->id);
-        if (!$product) {
-            return response()->json(['success' => false, 'message' => 'Product not found.']);
-        }
-
-        $product->name = $request->name;
-        $product->price = $request->price;
-        $product->specs = $request->specs;
-        $product->stock = $request->stock;
-
-        if ($request->hasFile('image')) {
-            // Delete the old image
-            if ($product->image && File::exists(public_path('images/' . $product->image))) {
-                File::delete(public_path('images/' . $product->image));
-            }
-
-            $imageName = time() . '.' . $request->image->getClientOriginalExtension();
-            $request->image->move(public_path('images'), $imageName);
-            $product->image = $imageName;
-        }
-
-        $product->save();
-
-        return response()->json([
-            'success' => true,
-            'image_url' => $request->hasFile('image') ? asset('images/' . $imageName) : null
-        ]);
+public function updateProduct(Request $request)
+{
+    $product = Product::find($request->id);
+    if (!$product) {
+        return response()->json(['success' => false, 'message' => 'Product not found.']);
     }
+
+    // Update only the fields that are present in the request
+    if ($request->has('name')) {
+        $product->name = $request->name;
+    }
+    if ($request->has('price')) {
+        $product->price = $request->price;
+    }
+    if ($request->has('specs')) {
+        $product->specs = $request->specs;
+    }
+    if ($request->has('stock')) {
+        $product->stock = $request->stock;
+    }
+
+    if ($request->hasFile('image')) {
+        // Delete the old image
+        if ($product->image && File::exists(public_path('images/' . $product->image))) {
+            File::delete(public_path('images/' . $product->image));
+        }
+
+        $imageName = time() . '.' . $request->image->getClientOriginalExtension();
+        $request->image->move(public_path('images'), $imageName);
+        $product->image = $imageName;
+    }
+
+    $product->save();
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Product updated successfully!',
+        'image_url' => $request->hasFile('image') ? asset('images/' . $imageName) : null
+    ]);
+}
+
+
 }

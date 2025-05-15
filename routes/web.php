@@ -25,6 +25,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/index', [ProductController::class, 'index'])->name('index');
     Route::post('/buy-product', [ProductController::class, 'buyProduct'])->name('buyProduct');
     Route::get('/order-success', [ProductController::class, 'orderSuccess'])->name('orderSuccess');
+    Route::get('/my-orders', [ProductController::class, 'myOrders'])->name('orders');
     Route::post('/update-stock', [ProductController::class, 'updateStock'])->name('update.stock');
     Route::post('/products/store', [ProductController::class, 'store'])->name('products.store');
     Route::post('/delete-product', [ProductController::class, 'deleteProduct'])->name('deleteProduct');

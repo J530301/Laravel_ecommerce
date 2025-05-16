@@ -14,24 +14,25 @@ class AuthenticatedSessionController extends Controller
     }
 
     public function register(Request $request)
-    {
-        // Validation logic
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|unique:users|max:255',
-            'password' => 'required|string|confirmed|min:8',
-        ]);
+{
+    // Validation logic
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|string|unique:users|max:255',
+        'password' => 'required|string|confirmed|min:8',
+        'role' => 'required|in:admin,user', // Add this line
+    ]);
 
-        // Create the new user
-        User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => bcrypt($request->password),
-            'role' => 'user',
-        ]);
+    // Create the new user
+    User::create([
+        'name' => $request->name,
+        'email' => $request->email,
+        'password' => bcrypt($request->password),
+        'role' => $request->role, // Save the selected role
+    ]);
 
-        return redirect()->route('login')->with('success', 'Registration successful! Please login.');
-    }
+    return redirect()->route('login')->with('success', 'Registration successful! Please login.');
+}
 
     public function store(Request $request)
     {

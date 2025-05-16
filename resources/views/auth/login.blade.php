@@ -65,6 +65,14 @@
     <form action="{{ route('register') }}" method="POST">
         @csrf
         <div class="mb-4">
+            <label for="role" class="block text-sm font-medium text-gray-700">Select Role</label>
+            <select name="role" id="role" class="mt-1 block w-full border-black rounded-md shadow-md border-b-2" required>
+                <option value="" disabled selected>Select Role</option>
+                <option value="admin">Admin</option>
+                <option value="user">User</option>
+            </select>
+        </div>
+        <div class="mb-4">
             <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
             <input type="text" name="name" id="name" class="mt-1 block w-full border-black rounded-md shadow-md border-b-2" required>
         </div>

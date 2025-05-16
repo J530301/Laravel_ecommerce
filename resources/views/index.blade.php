@@ -5,11 +5,12 @@
 
 
 
-<div class="home-bg min-h-screen w-full relative" style="background: url('{{ asset('images/banner-bg.jpg') }}') center center/cover no-repeat;">
-    <div class="bg-overlay absolute inset-0 z-[1] bg-black/15"></div>
-    <div class="content-relative relative z-[2] flex flex-col min-h-screen justify-center">
+<div 
+    class="w-full min-h-screen bg-cover bg-center"
+    style="background-image: url('{{ asset('images/banner-bg.jpg') }}');"
+>
 
-        <div id="productOverlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div id="productOverlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-[102]">
             <div class="bg-white p-8 rounded-2xl shadow-2xl w-11/12 md:w-2/3 lg:w-1/2 mx-auto mt-10 relative">
                 <div class="flex justify-between items-center mb-6">
                     @if(auth()->user()->role === 'admin')
@@ -85,6 +86,7 @@
             </div>
         </div>
         <!-- First Row: Quotes Slider -->
+
         <div class="flex justify-center items-center py-12 md:py-20">
             <div class="w-full max-w-2xl mx-auto">
                 <div id="quoteSlider" class="rounded-2xl shadow-2xl bg-white bg-opacity-80 p-8 text-center transition-all duration-500">
@@ -112,9 +114,8 @@
                 <div id="productContainer" class="grid grid-cols-1 sm:grid-cols-2 gap-6"></div>
             </div>
         </div>
-    </div>
+    
 </div>
-
 
 
 <script>

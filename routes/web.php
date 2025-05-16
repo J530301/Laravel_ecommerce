@@ -1,4 +1,5 @@
 <?php
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthenticatedSessionController;
 use App\Http\Controllers\ProductController;
@@ -34,4 +35,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/phone', [ProductController::class, 'showPhones'])->name('phone');
     Route::get('/computer', [ProductController::class, 'showComputers'])->name('computer');
     Route::get('/laptop', [ProductController::class, 'showLaptops'])->name('laptop');
+    Route::get('/account', [UserController::class, 'index'])->name('users.index');
+    Route::put('/account/{id}', [UserController::class, 'update'])->name('users.update');
+    Route::delete('/account/{id}', [UserController::class, 'destroy'])->name('users.destroy');
+
 });
